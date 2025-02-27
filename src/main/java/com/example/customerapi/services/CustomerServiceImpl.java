@@ -32,5 +32,39 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findAll();
     }
 
+    @Override
+    public Customer updateCustomer(Long id, Customer customer) {
+        Customer existingCustomer = getCustomerById(id);
+        existingCustomer.setFirstName(customer.getFirstName());
+        existingCustomer.setLastName(customer.getLastName());
+        existingCustomer.setEmail(customer.getEmail());
+        existingCustomer.setDateOfBirth(customer.getDateOfBirth());
+        existingCustomer.setPhoneNumber(customer.getPhoneNumber());
+        return customerRepository.save(existingCustomer);
+    }
 
+    @Override
+    public void deleteCustomer(Long id) {
+        customerRepository.deleteById(id);
+    }
+
+    @Override
+    public double getAverageAge() {
+        List<Customer> customers = customerRepository.findAll();
+        return customers.stream()
+                .mapToInt(customer -> Period.between(customer.getDateOfBirth(), LocalDate.now()).getYears())
+                .average()
+                .orElse(0);
+    }
+
+    @Override
+    public List<Customer> getCustomersBetweenAges(int minAge, int maxAge) {
+        LocalDate now = LocalDate.now();
+        return customerRepository.findAll().stream()
+                .filter(customer -> {
+                    int age = Period.between(customer.getDateOfBirth(), now).getYears();
+                    return age >= minAge && age <= maxAge;
+                })
+                .collect(Collectors.toList());
+    }
 }
