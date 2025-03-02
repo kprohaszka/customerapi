@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -34,7 +35,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
+    public ResponseEntity<?> getCustomerById(@PathVariable UUID id) {
         try {
             Customer customer = customerService.getCustomerById(id);
             return ResponseEntity.ok(customer);
@@ -49,7 +50,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCustomer(@PathVariable Long id, @Valid @RequestBody Customer customer) {
+    public ResponseEntity<?> updateCustomer(@PathVariable UUID id, @Valid @RequestBody Customer customer) {
         try {
             Customer updatedCustomer = customerService.updateCustomer(id, customer);
             return ResponseEntity.ok(updatedCustomer);
@@ -61,7 +62,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCustomer(@PathVariable UUID id) {
         try {
             customerService.deleteCustomer(id);
             return ResponseEntity.noContent().build();
@@ -82,8 +83,8 @@ public class CustomerController {
 
     @GetMapping("/age-range")
     public ResponseEntity<?> getCustomersBetweenAges(
-            @RequestParam(required = true) Integer minAge,
-            @RequestParam(required = true) Integer maxAge) {
+            @RequestParam() Integer minAge,
+            @RequestParam() Integer maxAge) {
         if (minAge == null || maxAge == null) {
             return createErrorResponse("Invalid parameters", "Both minAge and maxAge are required", HttpStatus.BAD_REQUEST);
         }

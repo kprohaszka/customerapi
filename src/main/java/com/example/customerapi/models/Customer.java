@@ -3,14 +3,15 @@ package com.example.customerapi.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Table(name = "customers")
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @NotBlank(message = "First name is required")
     @Size(max = 50, message = "First name must be less than 50 characters")
@@ -41,11 +42,11 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

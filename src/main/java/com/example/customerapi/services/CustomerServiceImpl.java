@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer getCustomerById(Long id) {
+    public Customer getCustomerById(UUID id) {
         return customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
     }
@@ -37,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer updateCustomer(Long id, Customer customer) {
+    public Customer updateCustomer(UUID id, Customer customer) {
         Customer existingCustomer = getCustomerById(id);
         validateCustomer(customer);
         existingCustomer.setFirstName(customer.getFirstName());
@@ -49,7 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomer(Long id) {
+    public void deleteCustomer(UUID id) {
         if (!customerRepository.existsById(id)) {
             throw new CustomerNotFoundException("Customer not found with id: " + id);
         }

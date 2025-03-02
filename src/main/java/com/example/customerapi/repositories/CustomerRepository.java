@@ -4,7 +4,9 @@ import com.example.customerapi.models.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+import java.util.UUID;
+
+public interface CustomerRepository extends JpaRepository<Customer, UUID> {
 
     @Query("SELECT COALESCE(AVG(CASE " +
             "WHEN (MONTH(c.dateOfBirth) > MONTH(CURRENT_DATE)) OR " +
