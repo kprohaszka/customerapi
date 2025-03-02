@@ -51,9 +51,19 @@ public class CustomerController {
     }
 
     @GetMapping("/age-range")
-    public ResponseEntity<List<Customer>> getCustomersBetweenAges(
-            @RequestParam int minAge,
-            @RequestParam int maxAge) {
+    public ResponseEntity<?> getCustomersBetweenAges(
+            @RequestParam(required = true) Integer minAge,
+            @RequestParam(required = true) Integer maxAge) {
+        if (minAge == null || maxAge == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Both minAge and maxAge are required");
+        }
+        if (minAge > maxAge) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("minAge must be less than or equal to maxAge");
+        }
         return ResponseEntity.ok(customerService.getCustomersBetweenAges(minAge, maxAge));
     }
 }

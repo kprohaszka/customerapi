@@ -50,11 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public double getAverageAge() {
-        List<Customer> customers = customerRepository.findAll();
-        return customers.stream()
-                .mapToInt(customer -> Period.between(customer.getDateOfBirth(), LocalDate.now()).getYears())
-                .average()
-                .orElse(0);
+        return customerRepository.findAverageAge();
     }
 
     @Override
@@ -63,7 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findAll().stream()
                 .filter(customer -> {
                     int age = Period.between(customer.getDateOfBirth(), now).getYears();
-                    return age >= minAge && age <= maxAge;
+                    return minAge <= age && age <= maxAge;
                 })
                 .collect(Collectors.toList());
     }
