@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NotBlank(message = "First name is required")
