@@ -31,8 +31,18 @@ public class UserService implements UserDetailsService {
     }
 
     public User saveUser(User user) {
-        user.setId(UUID.randomUUID());
+        if (!isPasswordValid(user.getPassword())) {
+            throw new IllegalArgumentException("Password does not meet security requirements");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password.length() >= 16 &&
+                password.matches(".*[A-Z].*") &&
+                password.matches(".*[a-z].*") &&
+                password.matches(".*\\d.*") &&
+                password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*");
     }
 }
