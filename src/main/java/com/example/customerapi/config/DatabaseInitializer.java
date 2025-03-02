@@ -63,15 +63,6 @@ public class DatabaseInitializer {
             ScriptUtils.executeSqlScript(connection, new ClassPathResource("schema.sql"));
             logger.info("Schema created successfully");
 
-            try (Statement statement = connection.createStatement()) {
-                statement.execute("CREATE TABLE IF NOT EXISTS users (" +
-                        "id UUID PRIMARY KEY, " +
-                        "username VARCHAR(255) UNIQUE NOT NULL, " +
-                        "password VARCHAR(255) NOT NULL, " +
-                        "role VARCHAR(50))");
-                logger.info("Users table created successfully");
-            }
-
             ScriptUtils.executeSqlScript(connection, new ClassPathResource("data.sql"));
             logger.info("Data inserted successfully");
 

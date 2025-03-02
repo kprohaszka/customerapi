@@ -2,6 +2,8 @@ package com.example.customerapi.services;
 
 import com.example.customerapi.models.Customer;
 import com.example.customerapi.repositories.CustomerRepository;
+import com.example.customerapi.exceptions.CustomerNotFoundException;
+import com.example.customerapi.exceptions.InvalidCustomerDataException;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
@@ -19,12 +21,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer createCustomer(Customer customer) {
+        validateCustomer(customer);
         return customerRepository.save(customer);
     }
 
     @Override
     public Customer getCustomerById(Long id) {
-        return customerRepository.findById(id).orElseThrow(() -> new RuntimeException("The customer is not found"));
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
     }
 
     @Override
@@ -35,6 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer updateCustomer(Long id, Customer customer) {
         Customer existingCustomer = getCustomerById(id);
+        validateCustomer(customer);
         existingCustomer.setFirstName(customer.getFirstName());
         existingCustomer.setLastName(customer.getLastName());
         existingCustomer.setEmail(customer.getEmail());
@@ -45,6 +50,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomer(Long id) {
+        if (!customerRepository.existsById(id)) {
+            throw new CustomerNotFoundException("Customer not found with id: " + id);
+        }
         customerRepository.deleteById(id);
     }
 
@@ -62,5 +70,23 @@ public class CustomerServiceImpl implements CustomerService {
                     return minAge <= age && age <= maxAge;
                 })
                 .collect(Collectors.toList());
+    }
+
+    private void validateCustomer(Customer customer) {
+        if (customer.getFirstName() == null || customer.getFirstName().trim().isEmpty()) {
+            throw new InvalidCustomerDataException("First name is required");
+        }
+        if (customer.getLastName() == null || customer.getLastName().trim().isEmpty()) {
+            throw new InvalidCustomerDataException("Last name is required");
+        }
+        if (customer.getEmail() == null || customer.getEmail().trim().isEmpty()) {
+            throw new InvalidCustomerDataException("Email is required");
+        }
+        if (customer.getDateOfBirth() == null) {
+            throw new InvalidCustomerDataException("Date of birth is required");
+        }
+        if (customer.getPhoneNumber() == null || customer.getPhoneNumber().trim().isEmpty()) {
+            throw new InvalidCustomerDataException("Phone number is required");
+        }
     }
 }

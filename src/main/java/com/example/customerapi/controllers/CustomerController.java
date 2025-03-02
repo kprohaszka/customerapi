@@ -2,12 +2,16 @@ package com.example.customerapi.controllers;
 
 import com.example.customerapi.models.Customer;
 import com.example.customerapi.services.CustomerService;
+import com.example.customerapi.exceptions.CustomerNotFoundException;
+import com.example.customerapi.exceptions.InvalidCustomerDataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -20,13 +24,23 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) {
-        return new ResponseEntity<>(customerService.createCustomer(customer), HttpStatus.CREATED);
+    public ResponseEntity<?> createCustomer(@Valid @RequestBody Customer customer) {
+        try {
+            Customer createdCustomer = customerService.createCustomer(customer);
+            return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
+        } catch (InvalidCustomerDataException e) {
+            return createErrorResponse("Invalid customer data", e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
-        return ResponseEntity.ok(customerService.getCustomerById(id));
+    public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
+        try {
+            Customer customer = customerService.getCustomerById(id);
+            return ResponseEntity.ok(customer);
+        } catch (CustomerNotFoundException e) {
+            return createErrorResponse("Customer not found", e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping
@@ -35,19 +49,35 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @Valid @RequestBody Customer customer) {
-        return ResponseEntity.ok(customerService.updateCustomer(id, customer));
+    public ResponseEntity<?> updateCustomer(@PathVariable Long id, @Valid @RequestBody Customer customer) {
+        try {
+            Customer updatedCustomer = customerService.updateCustomer(id, customer);
+            return ResponseEntity.ok(updatedCustomer);
+        } catch (CustomerNotFoundException e) {
+            return createErrorResponse("Customer not found", e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (InvalidCustomerDataException e) {
+            return createErrorResponse("Invalid customer data", e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
-        customerService.deleteCustomer(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteCustomer(@PathVariable Long id) {
+        try {
+            customerService.deleteCustomer(id);
+            return ResponseEntity.noContent().build();
+        } catch (CustomerNotFoundException e) {
+            return createErrorResponse("Customer not found", e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/average-age")
-    public ResponseEntity<Double> getAverageAge() {
-        return ResponseEntity.ok(customerService.getAverageAge());
+    public ResponseEntity<?> getAverageAge() {
+        try {
+            double averageAge = customerService.getAverageAge();
+            return ResponseEntity.ok(averageAge);
+        } catch (RuntimeException e) {
+            return createErrorResponse("Failed to calculate average age", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/age-range")
@@ -55,15 +85,23 @@ public class CustomerController {
             @RequestParam(required = true) Integer minAge,
             @RequestParam(required = true) Integer maxAge) {
         if (minAge == null || maxAge == null) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Both minAge and maxAge are required");
+            return createErrorResponse("Invalid parameters", "Both minAge and maxAge are required", HttpStatus.BAD_REQUEST);
         }
         if (minAge > maxAge) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("minAge must be less than or equal to maxAge");
+            return createErrorResponse("Invalid age range", "minAge must be less than or equal to maxAge", HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok(customerService.getCustomersBetweenAges(minAge, maxAge));
+        try {
+            List<Customer> customers = customerService.getCustomersBetweenAges(minAge, maxAge);
+            return ResponseEntity.ok(customers);
+        } catch (RuntimeException e) {
+            return createErrorResponse("Failed to retrieve customers", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private ResponseEntity<?> createErrorResponse(String error, String message, HttpStatus status) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", error);
+        response.put("message", message);
+        return new ResponseEntity<>(response, status);
     }
 }
