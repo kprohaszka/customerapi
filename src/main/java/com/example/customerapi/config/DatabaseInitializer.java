@@ -61,10 +61,10 @@
 //
 //    private void initializeDatabase(Connection connection) throws SQLException {
 //        try {
-//            ScriptUtils.executeSqlScript(connection, new ClassPathResource("schema.sql"));
+//            ScriptUtils.executeSqlScript(connection, new ClassPathResource("V2025.03.03.1__initial_schema.sql"));
 //            logger.info("Schema created successfully");
 //
-//            ScriptUtils.executeSqlScript(connection, new ClassPathResource("data.sql"));
+//            ScriptUtils.executeSqlScript(connection, new ClassPathResource("V2025.03.03.2__initial_data.sql"));
 //            logger.info("Data inserted successfully");
 //
 //            try (Statement statement = connection.createStatement()) {

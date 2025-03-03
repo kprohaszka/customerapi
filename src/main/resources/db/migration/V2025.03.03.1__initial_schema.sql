@@ -13,9 +13,3 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50)
     );
-
-CREATE TABLE IF NOT EXISTS db_initialization (
-                                                 id SERIAL PRIMARY KEY,
-                                                 initialized BOOLEAN NOT NULL,
-                                                 initialization_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
