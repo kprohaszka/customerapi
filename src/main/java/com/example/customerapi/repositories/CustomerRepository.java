@@ -8,11 +8,6 @@ import java.util.UUID;
 
 public interface CustomerRepository extends JpaRepository<Customer, UUID> {
 
-    @Query("SELECT COALESCE(AVG(CASE " +
-            "WHEN (MONTH(c.dateOfBirth) > MONTH(CURRENT_DATE)) OR " +
-            "     (MONTH(c.dateOfBirth) = MONTH(CURRENT_DATE) AND DAY(c.dateOfBirth) > DAY(CURRENT_DATE)) " +
-            "THEN YEAR(CURRENT_DATE) - YEAR(c.dateOfBirth) - 1 " +
-            "ELSE YEAR(CURRENT_DATE) - YEAR(c.dateOfBirth) " +
-            "END), 0) FROM Customer c")
+    @Query("SELECT COALESCE(AVG(YEAR(CURRENT_DATE) - YEAR(c.dateOfBirth)), 0) FROM Customer c")
     Double findAverageAge();
 }
