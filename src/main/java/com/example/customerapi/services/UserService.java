@@ -38,7 +38,7 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    private boolean isPasswordValid(String password) {
+    boolean isPasswordValid(String password) {
         return password.length() >= 16 &&
                 password.matches(".*[A-Z].*") &&
                 password.matches(".*[a-z].*") &&

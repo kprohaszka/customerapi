@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "PostgreSQL Setup"
+echo "PostgreSQL and JWT Setup"
 
 # Read PostgreSQL username
 read -p "Enter PostgreSQL username: " db_username
@@ -11,12 +11,17 @@ echo
 # Read desired database name
 read -p "Enter desired database name: " db_name
 
-# Save credentials to a config file
-echo "db.username=${db_username}" > db-config.properties
-echo "db.password=${db_password}" >> db-config.properties
-echo "db.name=${db_name}" >> db-config.properties
+# Generate JWT secret key
+jwt_secret=$(openssl rand -base64 32)
+echo "Generated JWT secret key: $jwt_secret"
 
-echo "Configuration saved."
+# Save credentials to a .env file
+echo "DB_USERNAME=${db_username}" > .env
+echo "DB_PASSWORD=${db_password}" >> .env
+echo "DB_NAME=${db_name}" >> .env
+echo "JWT_SECRET_KEY=${jwt_secret}" >> .env
+
+echo "Configuration saved to .env file."
 
 # Create the database
 if [ -z "$db_password" ]; then
@@ -30,3 +35,5 @@ if [ $? -eq 0 ]; then
 else
     echo "Failed to create database '$db_name'. Please check your credentials and PostgreSQL status."
 fi
+
+echo "Please ensure to add .env to your .gitignore file to keep your credentials secure."

@@ -1,0 +1,96 @@
+package com.example.customerapi.services;
+
+import com.example.customerapi.models.User;
+import com.example.customerapi.repositories.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+@Testcontainers
+class UserServiceTest {
+
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:14-alpine");
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @DynamicPropertySource
+    static void registerPgProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("spring.sql.init.mode", () -> "always");
+        registry.add("spring.jpa.hibernate.ddl-auto", () -> "none");
+    }
+
+    @BeforeEach
+    void setUp() {
+        userRepository.deleteAll();
+    }
+
+    @Test
+    void testLoadUserByUsername() {
+        User user = new User();
+        user.setUsername("testuser");
+        user.setPassword("StrongPassword123!");
+        userService.saveUser(user);
+
+        UserDetails userDetails = userService.loadUserByUsername("testuser");
+        assertNotNull(userDetails);
+        assertEquals("testuser", userDetails.getUsername());
+    }
+
+    @Test
+    void testLoadUserByUsername_UserNotFound() {
+        assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("nonexistent"));
+    }
+
+    @Test
+    void testSaveUser() {
+        User user = new User();
+        user.setUsername("newuser");
+        user.setPassword("StrongPassword123!");
+
+        User savedUser = userService.saveUser(user);
+        assertNotNull(savedUser.getId());
+        assertTrue(passwordEncoder.matches("StrongPassword123!", savedUser.getPassword()));
+    }
+
+    @Test
+    void testSaveUser_InvalidPassword() {
+        User user = new User();
+        user.setUsername("newuser");
+        user.setPassword("weak");
+
+        assertThrows(IllegalArgumentException.class, () -> userService.saveUser(user));
+    }
+
+    @Test
+    void testIsPasswordValid() {
+        assertTrue(userService.isPasswordValid("StrongPassword123!"));
+        assertFalse(userService.isPasswordValid("weak"));
+        assertFalse(userService.isPasswordValid("NoSpecialChar123"));
+        assertFalse(userService.isPasswordValid("NoNumber!"));
+        assertFalse(userService.isPasswordValid("nouppercase123!"));
+        assertFalse(userService.isPasswordValid("NOLOWERCASE123!"));
+    }
+}
