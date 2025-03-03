@@ -1,5 +1,6 @@
 package com.example.customerapi.services;
 
+import com.example.customerapi.BaseTest;
 import com.example.customerapi.models.User;
 import com.example.customerapi.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,10 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Testcontainers
-class UserServiceTest {
-
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:14-alpine");
+class UserServiceTest extends BaseTest {
 
     @Autowired
     private UserService userService;
@@ -32,15 +30,6 @@ class UserServiceTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @DynamicPropertySource
-    static void registerPgProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-        registry.add("spring.sql.init.mode", () -> "always");
-        registry.add("spring.jpa.hibernate.ddl-auto", () -> "none");
-    }
 
     @BeforeEach
     void setUp() {
