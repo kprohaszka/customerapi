@@ -215,7 +215,7 @@ class CustomerControllerTest extends BaseTest {
         mockMvc.perform(get("/api/customers/age-range")
                         .param("minAge", "20"))
                 .andExpect(status().isBadRequest());
-        
+
         verifyNoInteractions(customerService);
     }
 
