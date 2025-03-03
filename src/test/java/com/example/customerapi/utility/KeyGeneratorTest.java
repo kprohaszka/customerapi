@@ -13,7 +13,7 @@ class KeyGeneratorTest {
 
         assertNotNull(key1);
         assertNotNull(key2);
-        
+
         assertFalse(key1.isEmpty());
         assertFalse(key2.isEmpty());
 
