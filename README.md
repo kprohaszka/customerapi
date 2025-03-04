@@ -121,29 +121,389 @@ mvn spring-boot:run
 
 ## API Endpoints
 
-## Authentication
+## Authentication endpoints
 
--   `POST /api/auth/register`: Register a new user
+This segment provides information on how to use the authentication endpoints for user registration and login.
 
--   `POST /api/auth/login`: Login and get JWT token
+### Register a new user
+
+This endpoint allows you to create a new user account in the system.
+
+## Endpoint: `POST /api/auth/register`
+
+## Request body:
+
+```json
+{
+  "username": "johndoe",
+  "password": "\"4]C54j,ni$839or",
+}
+```
+
+### Constraints: 
+
+-   Password must be at least 16 characters, containing upper and lowercase letters, numbers and symbols.
+-   
+-   An email address can only be used once.
+
+## Successful Response (200 OK) example:
+
+```json
+{
+  "id": ad1940fc-11a8-4f04-83d2-92f204a4f750,
+  "username": "johndoe",
+  "email": "john.doe@example.com",
+  "password": "$2a$10$zLwB04YeRMV7ypgdIH6Cder0ErtFIPR.aFuM6pDI5sWf2hXrGfH.u",
+  "role": null
+}
+```
+
+### Notes:
+
+-   Passwords are only returned in a hashed version for development purposes and should not be returned like this in production.
+
+-   Role is not filled at the moment but can be used in the future for more precise authentication based on a role level (User, Admin etc.)
+
+## Error Response (400 Bad Request) example:
+
+```json
+{
+Error during registration: could not
+execute statement [ERROR: duplicate key value violates unique constraint "users_username_key"]
+}
+```
+
+### User Login
+
+This endpoint authenticates a user and returns a JWT token that can be used for subsequent authenticated requests.
+## Endpoint: `POST /api/auth/login`
+## Request Body:
+
+```json
+{
+  "username": "johndoe",
+  "password": "\"4]C54j,ni$839or"
+}
+
+```
+
+## Successful Response (200 OK):
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNjE2MTU5MDIyLCJleHAiOjE2MTYxNjI2MjJ9.example_token_signature"
+}
+```
+
+## Error Response (401 Unauthorized):
+
+```json
+{"Invalid username or password"}
+```
+
+### Using the JWT Token
+After successful authentication, you should:
+	1.	Store the JWT token securely (e.g., in localStorage, HttpOnly cookies, etc.)
+	2.	Include the token in the Authorization header for subsequent API requests:
+
+ ```json
+{
+Authorization: Bearer
+ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNjE2MTU5MDIyLCJleHAiOjE2MTYxNjI2MjJ9.example_token_signature
+}
+
+```
+
+### Implementation Details
+The authentication controller uses Spring Security’s `AuthenticationManager` to validate user credentials and a custom `JwtUtil` class to generate JWT tokens.
+For registration, the controller delegates to the `UserService` to handle user creation, which includes password encoding and validation.
+
+### Error Handling
+
+-   Registration errors return a 400 Bad Request status with an error message
+-   Authentication errors return a 401 Unauthorized status with an error message
+
+### Security Considerations
+	•	Using JWT tokens with expiration for secure authentication
+
+### Data Transfer Objects
+The API uses the following DTOs:
+	1.	LoginRequest: Contains username and password for authentication
+	2.	AuthResponse: Contains the JWT token returned after successful authentication
 
 ------
 
-## Customers
+## Customer Management Endpoints
 
--   `GET /api/customers`: Get all customers
+This segment provides information on how to use the customer management endpoints for creating, retrieving, updating, and deleting customers, as well as retrieving customer statistics.
 
--   `GET /api/customers/{id}`: Get customer by ID
+### Create a new Customer
 
--   `POST /api/customers`: Create a new customer
+## Endpoint: `POST /api/customers`
+## Request Body:
 
--   `PUT /api/customers/{id}`: Update a customer
+```json
+{
+		"id": "e5e58977-9ae6-4b11-8041-20159856af3f",
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "dateOfBirth": "1990-01-15",
+  "phoneNumber": "+1234567890",
+}
+```
 
--   `DELETE /api/customers/{id}`: Delete a customer
+## Successful Response (201 Created):
 
--   `GET /api/customers/average-age`: Get average age of all customers
+```json
+{
+	"id": "e5e58977-9ae6-4b11-8041-20159856af3f",
+	"firstName": "John",
+	"lastName": "Doe",
+	"email": "john.dooe@example.com",
+	"dateOfBirth": "1990-01-01",
+	"phoneNumber": "+1234567890"
+}
+```
 
--   `GET /api/customers/age-range?minAge=X&maxAge=Y`: Get customers between specified ages
+## Error Responses:
+
+-   409 Conflict (Duplicate email):
+
+```json
+{
+	"error": "Duplicate email",
+	"message": "A customer with this email already exists"
+}
+```
+
+### Get a Customer by ID
+This endpoint retrieves a specific customer by their ID.
+
+## Endpoint: `GET /api/customers/{id}`
+##Path Parameter:
+-   `id`: UUID of the customer to retrieve
+
+## Successful Response (200 OK):
+
+```json
+{
+	"id": "e5e58977-9ae6-4b11-8041-20159856af3f",
+	"firstName": "John",
+	"lastName": "Dooe",
+	"email": "john.doe@example.com",
+	"dateOfBirth": "1990-01-01",
+	"phoneNumber": "+1234567890"
+}
+```
+
+## Error Response (404 Not Found):
+
+```json
+{
+	"error": "Customer not found",
+	"message": "Customer not found with id: 945decf1-6e23-4e9b-a6c8-0f69f1f10422"
+}
+```
+
+### Get All Customers
+This endpoint retrieves a list of all customers.
+
+## Endpoint: `GET /api/customers`
+
+## Successful Response (200 OK):
+
+```json
+[
+  {
+    "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "dateOfBirth": "1990-01-15",
+    "phoneNumber": "+1234567890",
+  },
+  {
+    "id": "a1b2c3d4-e5f6-4a5b-9c8d-7e6f5a4b3c2d",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "email": "jane.smith@example.com",
+    "dateOfBirth": "1985-06-22",
+    "phoneNumber": "+1987654321",
+  }
+]
+```
+
+### Update a Customer
+This endpoint updates an existing customer’s information.
+
+## Endpoint: `PUT /api/customers/{id}`
+
+## Path Parameter:
+	•	`id`: UUID of the customer to update
+
+## Request Body
+
+```json
+{
+	"id": "e5e58977-9ae6-4b11-8041-20159856af3f",
+	"firstName": "John",
+	"lastName": "Dooe",
+	"email": "john.doe@example.com",
+	"dateOfBirth": "1990-01-01",
+	"phoneNumber": "+1234567890"
+}
+```
+
+## Successful Response (200 OK):
+
+```json
+{
+	"id": "e5e58977-9ae6-4b11-8041-20159856af3f",
+	"firstName": "John",
+	"lastName": "Dooe",
+	"email": "john.doe@example.com",
+	"dateOfBirth": "1990-01-01",
+	"phoneNumber": "+1234567890"
+}
+```
+
+## Error Responses:
+
+- ## 404 Not Found:
+
+```json
+{
+  "error": "Customer not found",
+  "message": "Customer not found with id: f47ac10b-58cc-4372-a567-0e02b2c3d479"
+}
+```
+
+- ## 409 Conflict (Duplicate email):
+
+
+```json
+{
+  "error": "Duplicate email",
+  "message": "A customer with this email already exists"
+}
+```
+
+### Delete a Customer
+This endpoint deletes a customer from the system.
+
+## Endpoint: `DELETE /api/customers/{id}`
+
+## Path Parameter:
+-   `id`: UUID of the customer to delete
+
+## Successful Response (204 No Content): 
+No response body is returned for a successful deletion.
+
+## Error Response (404 Not Found):
+
+```json
+{
+	"error": "Customer not found",
+	"message": "Customer not found with id: c5539a9d-af41-4bc9-bb70-1bdd4aa446b1"
+}
+```
+
+### Get Average Customer Age
+This endpoint calculates and returns the average age of all customers.
+
+## Endpoint: `GET /api/customers/average-age`
+
+## Successful Response (200 OK):
+
+```json
+{
+35.7
+}
+```
+
+## Error Response (500 Internal Server Error):
+
+{
+  "error": "Failed to calculate average age",
+  "message": "Error retrieving customer data"
+}
+
+### Get Customers Within Age Range
+
+## This endpoint retrieves customers whose ages fall within the specified range.
+
+## Endpoint: `GET /api/customers/age-range?minAge=25&maxAge=40`
+
+## Query Parameters:
+
+-   `minAge`: Minimum age (inclusive)
+-   `maxAge`: Maximum age (inclusive)
+  
+## Successful Response (200 OK):
+
+```json
+[
+  {
+    "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "dateOfBirth": "1990-01-15",
+    "phoneNumber": "+1234567890",
+  },
+  {
+    "id": "a1b2c3d4-e5f6-4a5b-9c8d-7e6f5a4b3c2d",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "email": "jane.smith@example.com",
+    "dateOfBirth": "1985-06-22",
+    "phoneNumber": "+1987654321",
+  }
+]
+
+```
+
+## Error Responses:
+- ## 400 Bad Request (Invalid parameters):
+
+```json
+{
+  "error": "Invalid parameters",
+  "message": "Both minAge and maxAge are required"
+}
+```
+
+- ## 400 Bad Request (Invalid range):
+
+```json
+{
+  "error": "Invalid age range",
+  "message": "minAge must be less than or equal to maxAge"
+}
+```
+
+### General Error Handling
+The API uses consistent error responses with the following structure:
+
+```json
+{
+  "error": "Error type",
+  "message": "Detailed error message"
+}
+```
+
+### Authentication
+All endpoints in this controller require authentication. Make sure to include the JWT token in the Authorization header:
+
+```json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNjE2MTU5MDIyLCJleHAiOjE2MTYxNjI2MjJ9.example_token_signature
+```
+
+### Implementation Details
+The customer controller handles CRUD operations for customer management and provides statistical endpoints. 
+
+It uses a `CustomerService` for business logic and includes comprehensive error handling for various scenarios.
 
 ------
 
@@ -230,7 +590,7 @@ There are some known issues that can be fixed later on for a more robust softwar
 
 ## Improvements & Future Enhancements
 
-While the project is functional, I would like to provide some ways to improve the program:
+While the project is functional, I would like to provide some ways to improve the program, if it ever further develops, as a roadmap, due to the limited development time:
 
 -   **Enhanced Logging**: Extend logging coverage for a more robust program.
 -   **Error Handling**: Implement wider error handling to capture and report issues more effectively.
@@ -246,6 +606,7 @@ While the project is functional, I would like to provide some ways to improve th
 -   **Using kubernetes secrets or similar**: Right now, the software stores the DB credentials locally, without uploading it (.gitignored). However, there is a more elegant way doing this, for example with kubernetes secrets or similar, or storing them in the Secret or ConfigMap then mounting it to the container as a file.
 -   **Double check native SQLs, scalability and modularity**: The application is built with modularity and scalability in mind, so each part should ensure it can be easily migrated to other dialects, databases etc.
 -   **Change 500 Internal Server Error to Email Already Exists**: Currently this is not handled with a proper error code.
+-   **Https instead of http**: In production a https certificate would a great step to improve safety and conform modern needs.
 
 By implementing these improvements, the project will become more robust, secure, scalable and clear for new users.
 
