@@ -4,6 +4,8 @@ import com.example.customerapi.models.Customer;
 import com.example.customerapi.services.CustomerService;
 import com.example.customerapi.exceptions.CustomerNotFoundException;
 import com.example.customerapi.exceptions.InvalidCustomerDataException;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,11 @@ public class CustomerController {
         try {
             Customer createdCustomer = customerService.createCustomer(customer);
             return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("customers_email_key")) {
+                return createErrorResponse("Duplicate email", "A customer with this email already exists", HttpStatus.CONFLICT);
+            }
+            return createErrorResponse("Database error", "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (InvalidCustomerDataException e) {
             return createErrorResponse("Invalid customer data", e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -54,6 +61,11 @@ public class CustomerController {
         try {
             Customer updatedCustomer = customerService.updateCustomer(id, customer);
             return ResponseEntity.ok(updatedCustomer);
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("customers_email_key")) {
+                return createErrorResponse("Duplicate email", "A customer with this email already exists", HttpStatus.CONFLICT);
+            }
+            return createErrorResponse("Database error", "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (CustomerNotFoundException e) {
             return createErrorResponse("Customer not found", e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InvalidCustomerDataException e) {
