@@ -40,23 +40,18 @@ public class SecurityConfigTest extends BaseTest {
 
     @Test
     public void testAuthenticationProvider() {
-        // When
         DaoAuthenticationProvider provider = securityConfig.authenticationProvider();
 
-        // Then
         assertNotNull(provider);
     }
 
     @Test
     public void testAuthenticationManager() throws Exception {
-        // Given
         AuthenticationManager mockAuthManager = mock(AuthenticationManager.class);
         when(authenticationConfiguration.getAuthenticationManager()).thenReturn(mockAuthManager);
 
-        // When
         AuthenticationManager result = securityConfig.authenticationManager(authenticationConfiguration);
 
-        // Then
         assertNotNull(result);
         assertEquals(mockAuthManager, result);
         verify(authenticationConfiguration).getAuthenticationManager();
