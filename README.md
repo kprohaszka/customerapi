@@ -49,14 +49,14 @@ Customer API is a Spring Boot application that provides a secure way to manage c
 ```
 com.example.customerapi/
 ├── config/                 # Configuration classes
-├── controllers/            # REST API endpoints
-├── dataTransferObjects/    # Data transfer objects
-├── exceptions/             # Custom exceptions and error handling
-├── models/                 # Entity classes
-├── repositories/           # Data access interfaces
+├── controller/            # REST API endpoints
+├── dataTransferObject/    # Data transfer objects
+├── exception/             # Custom exceptions and error handling
+├── model/                 # Entity classes
+├── repository/           # Data access interfaces
 ├── security/               # JWT authentication and security
-├── services/               # Business logic
-└── utils/                  # Utility classes
+├── service/               # Business logic
+└── util/                  # Utility classes
 ```
 
 ## Getting Started
