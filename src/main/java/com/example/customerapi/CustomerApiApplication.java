@@ -1,6 +1,6 @@
 package com.example.customerapi;
 
-import com.example.customerapi.utils.KeyGenerator;
+import com.example.customerapi.util.KeyGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

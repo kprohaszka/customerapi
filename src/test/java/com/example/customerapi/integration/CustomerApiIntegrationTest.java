@@ -1,12 +1,12 @@
 package com.example.customerapi.integration;
 
 import com.example.customerapi.BaseTest;
-import com.example.customerapi.dataTransferObjects.AuthResponse;
-import com.example.customerapi.dataTransferObjects.LoginRequest;
-import com.example.customerapi.models.Customer;
-import com.example.customerapi.models.User;
-import com.example.customerapi.repositories.CustomerRepository;
-import com.example.customerapi.repositories.UserRepository;
+import com.example.customerapi.dataTransferObject.AuthResponse;
+import com.example.customerapi.dataTransferObject.LoginRequest;
+import com.example.customerapi.model.Customer;
+import com.example.customerapi.model.User;
+import com.example.customerapi.repository.CustomerRepository;
+import com.example.customerapi.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
