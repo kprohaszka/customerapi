@@ -200,12 +200,14 @@ Then open  `target/site/jacoco/index.html`  in your browser to view the report.
 
 ## Troubleshooting
 
+Errors that may occur and how to handle them:
+
 - **400 Bad Request - Missing Parameter**: This occurs when the `/age-range` endpoint is called without the right parameters. Please make sure you add them as expected.
 - **400 Bad Request - Invalid Age Range**: This occurs when the `/age-range` endpoint is called and the minParameter is bigger than the maxParameter. Please make sure you add them as expected.
 - **401 Unathorized - Invalid username or password**: As the message says, the password or the username is invalid, please double check you are registered and everything is correct.
 - **403 Forbidden**: If you see an error like `403 Forbidden`, ensure that the Authentication bearer token is added to the request and it is a fresh one acquired through to login endpoint. 
 - **404 Not Found - Customer Not Found:**: This error can occur with multiple endpoints, it means that the UUID for the given customer does not exists, it is either mistyped or not in the database.
-- **500 Internal Server Error:**: This may happen when a new customer is created with an email that already exists in the database.
+- **409 Conflict - Duplicate Email**: This error can occur when creating or updating a customer with an email that already exists within the database, since it should be unique.
  ------
 
 ## Development Notes
