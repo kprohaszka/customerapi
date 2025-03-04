@@ -119,6 +119,8 @@ chmod +x setup.sh
 mvn spring-boot:run
 ```
 
+------
+
 ## API Endpoints
 
 ## Authentication endpoints
