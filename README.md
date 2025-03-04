@@ -83,7 +83,7 @@ cd customerapi
 2. Configure the database connection in  `application.properties` (optional, handled in setup.sh):
 
 ```text 
-spring.datasource.url=jdbc:postgresql://localhost:5432/customerdb
+spring.datasource.url=jdbc:postgresql://localhost:5432/customerapidb
 spring.datasource.username=postgres 
 spring.datasource.password=yourpassword
 ```
