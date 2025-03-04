@@ -80,7 +80,7 @@ com.example.customerapi/
 git clone https://github.com/kprohaszka/customerapi.git
 cd customerapi
 ```
-2. Configure the database connection in  `application.properties (optional, handled in setup.sh)`:
+2. Configure the database connection in  `application.properties` (optional, handled in setup.sh):
 
 ```text 
 spring.datasource.url=jdbc:postgresql://localhost:5432/customerdb
@@ -88,7 +88,7 @@ spring.datasource.username=postgres
 spring.datasource.password=yourpassword
 ```
 
-3. Configure JWT settings in `application.properties (optional, handled in setup.sh)`:
+3. Configure JWT settings in `application.properties` (optional, handled in setup.sh):
 
 ```text 
 jwt.secret=your-secret-key-should-be-at-least-32-characters 
