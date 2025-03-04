@@ -145,8 +145,6 @@ This endpoint allows you to create a new user account in the system.
 ### Constraints: 
 
 -   Password must be at least 16 characters, containing upper and lowercase letters, numbers and symbols.
--   
--   An email address can only be used once.
 
 ## Successful Response (200 OK) example:
 
@@ -246,7 +244,7 @@ This segment provides information on how to use the customer management endpoint
 
 ```json
 {
-		"id": "e5e58977-9ae6-4b11-8041-20159856af3f",
+  "id": "e5e58977-9ae6-4b11-8041-20159856af3f",
   "firstName": "John",
   "lastName": "Doe",
   "email": "john.doe@example.com",
@@ -270,7 +268,7 @@ This segment provides information on how to use the customer management endpoint
 
 ## Error Responses:
 
--   409 Conflict (Duplicate email):
+- ## 409 Conflict (Duplicate email):
 
 ```json
 {
@@ -278,6 +276,10 @@ This segment provides information on how to use the customer management endpoint
 	"message": "A customer with this email already exists"
 }
 ```
+
+### Constraints: 
+
+-   An email address can only be used once.
 
 ### Get a Customer by ID
 This endpoint retrieves a specific customer by their ID.
