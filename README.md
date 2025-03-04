@@ -43,6 +43,7 @@ Customer API is a Spring Boot application that provides a secure way to manage c
 
 ## Project Structure
 
+```
 com.example.customerapi/
 ├── config/                 # Configuration classes
 ├── controllers/            # REST API endpoints
@@ -53,7 +54,7 @@ com.example.customerapi/
 ├── security/               # JWT authentication and security
 ├── services/               # Business logic
 └── utils/                  # Utility classes
-
+```
 
 ## Getting Started
 
