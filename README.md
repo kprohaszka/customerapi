@@ -96,7 +96,19 @@ jwt.expiration=86400
 mvn clean install
 ```
 
-5. Run the application:
+5.  Modify setup.sh permissions (Optional):
+
+```bash 
+chmod +x setup.sh
+```
+
+6.  Run setup.sh script to initialize DB:
+
+```bash 
+./setup.sh
+```
+
+7. Run the application:
 
 ```bash 
 mvn spring-boot:run
