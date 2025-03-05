@@ -1,4 +1,3 @@
-[InsomniaRequests.json](https://github.com/user-attachments/files/19079451/InsomniaRequests.json)
 # Customer API
 
 A RESTful API for managing customer data with JWT authentication.
