@@ -1,4 +1,4 @@
-
+[InsomniaRequests.json](https://github.com/user-attachments/files/19079451/InsomniaRequests.json)
 # Customer API
 
 A RESTful API for managing customer data with JWT authentication.
@@ -540,6 +540,9 @@ text
 http://localhost:8080/swagger-ui.html
 ```
 
+![image](https://github.com/user-attachments/assets/0f8630ed-236c-4ee8-a6aa-a4cda8d90812)
+
+
 ------
 
 ## Testing
@@ -561,7 +564,7 @@ mvn test
 
 ## Test Coverage
 
-The project uses JaCoCo for code coverage analysis. Generate a coverage report with:
+The project uses JaCoCo for code coverage analysis. Generate a coverage report with (Under Maintenance):
 
 ```bash
 mvn verify
@@ -634,9 +637,17 @@ While the project is functional, I would like to provide some ways to improve th
 -   **Better error message faulty phone number**: It would look better if there would be a more informative message when phone number is incorrect upon creation.
 -   **Better error message if id not found**: A more informative message when an id is not found during GetCustomerById.
 -   **More informative response when customer is created**: There may be an informative response when the customer is updated.
--   **Handle incorrect email address nicer**: Would be an upgrade if the incorrect email handling is nicer.
+-   **Handle incorrect email address nicer**: Would be an upgrade if the incorrect email handling is nicer.\
+-   **Make Jacoco functional**: It is not fully functional yet.
 
 By implementing these improvements, the project will become more robust, secure, scalable and clear for new users.
+
+------
+
+## Insomnia Requests
+For ease of use, feel free to use the following request collection with Insomnia:
+
+[InsomniaRequests.json.zip](https://github.com/user-attachments/files/19079454/InsomniaRequests.json.zip)
 
 ------
 
