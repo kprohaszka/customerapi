@@ -150,7 +150,7 @@ This endpoint allows you to create a new user account in the system.
 
 ```json
 {
-  "id": ad1940fc-11a8-4f04-83d2-92f204a4f750,
+  "id": "ad1940fc-11a8-4f04-83d2-92f204a4f750",
   "username": "johndoe",
   "email": "john.doe@example.com",
   "password": "$2a$10$zLwB04YeRMV7ypgdIH6Cder0ErtFIPR.aFuM6pDI5sWf2hXrGfH.u",
@@ -168,8 +168,8 @@ This endpoint allows you to create a new user account in the system.
 
 ```json
 {
-Error during registration: could not
-execute statement [ERROR: duplicate key value violates unique constraint "users_username_key"]
+"Error during registration: could not
+execute statement [ERROR: duplicate key value violates unique constraint "users_username_key"]"
 }
 ```
 
@@ -208,8 +208,8 @@ After successful authentication, you should:
 
  ```json
 {
-Authorization: Bearer
- eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNjE2MTU5MDIyLCJleHAiOjE2MTYxNjI2MjJ9.example_token_signature
+"Authorization: Bearer
+ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNjE2MTU5MDIyLCJleHAiOjE2MTYxNjI2MjJ9.example_token_signature"
 }
 
 ```
@@ -344,7 +344,7 @@ This endpoint updates an existing customer’s information.
 ## Endpoint: `PUT /api/customers/{id}`
 
 ## Path Parameter:
-	•	`id`: UUID of the customer to update
+-   `id`: UUID of the customer to update
 
 ## Request Body
 
@@ -501,7 +501,7 @@ The API uses consistent error responses with the following structure:
 All endpoints in this controller require authentication. Make sure to include the JWT token in the Authorization header:
 
 ```json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNjE2MTU5MDIyLCJleHAiOjE2MTYxNjI2MjJ9.example_token_signature
+"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNjE2MTU5MDIyLCJleHAiOjE2MTYxNjI2MjJ9.example_token_signature"
 ```
 
 ### Implementation Details
