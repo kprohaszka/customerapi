@@ -127,7 +127,7 @@ mvn spring-boot:run
 
 This segment provides information on how to use the authentication endpoints for user registration and login.
 
-### Register a new user
+## Register a new user
 
 This endpoint allows you to create a new user account in the system.
 
@@ -173,7 +173,9 @@ execute statement [ERROR: duplicate key value violates unique constraint "users_
 }
 ```
 
-### User Login
+------
+
+## User Login
 
 This endpoint authenticates a user and returns a JWT token that can be used for subsequent authenticated requests.
 ## Endpoint: `POST /api/auth/login`
@@ -237,7 +239,7 @@ The API uses the following DTOs:
 
 This segment provides information on how to use the customer management endpoints for creating, retrieving, updating, and deleting customers, as well as retrieving customer statistics.
 
-### Create a new Customer
+## Create a new Customer
 
 ## Endpoint: `POST /api/customers`
 ## Request Body:
@@ -281,11 +283,13 @@ This segment provides information on how to use the customer management endpoint
 
 -   An email address can only be used once.
 
-### Get a Customer by ID
+------
+
+## Get a Customer by ID
 This endpoint retrieves a specific customer by their ID.
 
 ## Endpoint: `GET /api/customers/{id}`
-##Path Parameter:
+## Path Parameter:
 -   `id`: UUID of the customer to retrieve
 
 ## Successful Response (200 OK):
@@ -310,7 +314,9 @@ This endpoint retrieves a specific customer by their ID.
 }
 ```
 
-### Get All Customers
+------
+
+## Get All Customers
 This endpoint retrieves a list of all customers.
 
 ## Endpoint: `GET /api/customers`
@@ -393,7 +399,9 @@ This endpoint updates an existing customer’s information.
 }
 ```
 
-### Delete a Customer
+------
+
+## Delete a Customer
 This endpoint deletes a customer from the system.
 
 ## Endpoint: `DELETE /api/customers/{id}`
@@ -413,7 +421,9 @@ No response body is returned for a successful deletion.
 }
 ```
 
-### Get Average Customer Age
+------
+
+## Get Average Customer Age
 This endpoint calculates and returns the average age of all customers.
 
 ## Endpoint: `GET /api/customers/average-age`
@@ -428,12 +438,16 @@ This endpoint calculates and returns the average age of all customers.
 
 ## Error Response (500 Internal Server Error):
 
+```json
 {
   "error": "Failed to calculate average age",
   "message": "Error retrieving customer data"
 }
+```
 
-### Get Customers Within Age Range
+------
+
+## Get Customers Within Age Range
 
 ## This endpoint retrieves customers whose ages fall within the specified range.
 
@@ -487,7 +501,9 @@ This endpoint calculates and returns the average age of all customers.
 }
 ```
 
-### General Error Handling
+------
+
+## General Error Handling
 The API uses consistent error responses with the following structure:
 
 ```json
@@ -497,14 +513,18 @@ The API uses consistent error responses with the following structure:
 }
 ```
 
-### Authentication
+------
+
+## Authentication
 All endpoints in this controller require authentication. Make sure to include the JWT token in the Authorization header:
 
 ```json
 "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNjE2MTU5MDIyLCJleHAiOjE2MTYxNjI2MjJ9.example_token_signature"
 ```
 
-### Implementation Details
+------
+
+## Implementation Details
 The customer controller handles CRUD operations for customer management and provides statistical endpoints. 
 
 It uses a `CustomerService` for business logic and includes comprehensive error handling for various scenarios.
