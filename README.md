@@ -224,7 +224,7 @@ For registration, the controller delegates to the `UserService` to handle user c
 -   Authentication errors return a 401 Unauthorized status with an error message
 
 ### Security Considerations
-	•	Using JWT tokens with expiration for secure authentication
+-   Using JWT tokens with expiration for secure authentication
 
 ### Data Transfer Objects
 The API uses the following DTOs:
@@ -257,12 +257,12 @@ This segment provides information on how to use the customer management endpoint
 
 ```json
 {
-	"id": "e5e58977-9ae6-4b11-8041-20159856af3f",
-	"firstName": "John",
-	"lastName": "Doe",
-	"email": "john.dooe@example.com",
-	"dateOfBirth": "1990-01-01",
-	"phoneNumber": "+1234567890"
+"id": "e5e58977-9ae6-4b11-8041-20159856af3f",
+"firstName": "John",
+"lastName": "Doe",
+"email": "john.dooe@example.com",
+"dateOfBirth": "1990-01-01",
+"phoneNumber": "+1234567890"
 }
 ```
 
@@ -272,7 +272,7 @@ This segment provides information on how to use the customer management endpoint
 
 ```json
 {
-	"error": "Duplicate email",
+  "error": "Duplicate email",
 	"message": "A customer with this email already exists"
 }
 ```
