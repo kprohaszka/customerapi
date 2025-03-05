@@ -631,6 +631,10 @@ While the project is functional, I would like to provide some ways to improve th
 -   **Double check native SQLs, scalability and modularity**: The application is built with modularity and scalability in mind, so each part should ensure it can be easily migrated to other dialects, databases etc.
 -   **Change 500 Internal Server Error to Email Already Exists**: Currently this is not handled with a proper error code.
 -   **Https instead of http**: In production a https certificate would a great step to improve safety and conform modern needs.
+-   **Better error message faulty phone number**: It would look better if there would be a more informative message when phone number is incorrect upon creation.
+-   **Better error message if id not found**: A more informative message when an id is not found during GetCustomerById.
+-   **More informative response when customer is created**: There may be an informative response when the customer is updated.
+-   **Handle incorrect email address nicer**: Would be an upgrade if the incorrect email handling is nicer.
 
 By implementing these improvements, the project will become more robust, secure, scalable and clear for new users.
 
